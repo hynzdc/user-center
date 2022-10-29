@@ -20,4 +20,12 @@ class UserCenterApplicationTests {
         System.out.println(one);
     }
 
+    @Test
+    void userRegister(){
+        String userPassword = "woai2014";
+        String checkPassword = "woai2014";
+        String userAccount = "hynzdcyaya";
+        userService.userRegister(userAccount,userPassword,checkPassword);
+    }
+
 }

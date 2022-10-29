@@ -13,6 +13,7 @@ public enum UserCenterServiceEnum {
     USER_ACCOUNT_HAVE_USE(004,"该账户已被使用"),
     USER_ACCOUNT_HAVE_SPECIAL_CHARACTERS(005,"用户名含有特殊字符"),
     USER_TWO_DIFFERENT_PASSWORDS(006,"两次输入的密码不同"),
+    USER_FAIL_REGISTER(007,"用户注册失败"),
     ;
 
     UserCenterServiceEnum(Integer code, String msg) {
