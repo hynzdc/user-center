@@ -7,13 +7,16 @@ package com.hyn.enums;
  * @date 2022/10/29
  */
 public enum UserCenterServiceEnum {
-    USER_REGISTER_DETAIL_NO_BLANK(001,"用户注册信息不可为空"),
-    USER_ACCOUNT_LESS_THEN_FOUR(002,"用户帐户小于4位"),
-    USER_PASSWORD_LESS_THEN_EIGHT(003,"用户密码小于8位"),
-    USER_ACCOUNT_HAVE_USE(004,"该账户已被使用"),
-    USER_ACCOUNT_HAVE_SPECIAL_CHARACTERS(005,"用户名含有特殊字符"),
-    USER_TWO_DIFFERENT_PASSWORDS(006,"两次输入的密码不同"),
-    USER_FAIL_REGISTER(007,"用户注册失败"),
+    USER_REGISTER_DETAIL_NO_BLANK(100,"用户注册信息不可为空"),
+    USER_ACCOUNT_LESS_THEN_FOUR(101,"用户帐户小于4位"),
+    USER_PASSWORD_LESS_THEN_EIGHT(102,"用户密码小于8位"),
+    USER_ACCOUNT_HAVE_USE(103,"该账户已被使用"),
+    USER_ACCOUNT_HAVE_SPECIAL_CHARACTERS(104,"用户名含有特殊字符"),
+    USER_TWO_DIFFERENT_PASSWORDS(105,"两次输入的密码不同"),
+    USER_FAIL_REGISTER(106,"用户注册失败"),
+    USER_LOGIN_DETAIL_NO_BLANK(107,"用户登录信息不可以为空"),
+    USER_NOT_FOUND(108,"帐户不存在"),
+    USERNAME_OR_PASSWORD_ERROR(108,"用户名或者密码错误"),
     ;
 
     UserCenterServiceEnum(Integer code, String msg) {
