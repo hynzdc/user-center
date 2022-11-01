@@ -1,9 +1,6 @@
 package com.hyn.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 
 import java.util.Date;
 
@@ -90,6 +87,7 @@ public class User {
      * 是否删除
      */
     @TableField(value = "isDelete")
+    @TableLogic
     private Byte isDelete;
 
     /**

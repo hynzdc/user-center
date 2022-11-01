@@ -5,6 +5,7 @@ import com.hyn.enums.ConHttpStatusEnum;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * @author hyn
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @description 统一异常拦截处理
  * @date 2022/10/29
  */
+@RestControllerAdvice
 @RestController
-@ControllerAdvice
 public class CustomExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ConResult defaultExceptionHandler(Exception e){
@@ -21,6 +22,8 @@ public class CustomExceptionHandler {
     }
     @ExceptionHandler(BusinessException.class)
     public ConResult defaultExceptionHandler(BusinessException e){
-        return ConResult.fail(e.getMessage());
+        System.out.println("dhawdawhoidhawoihdoiawhd");
+        System.out.println("和大海");
+        return ConResult.fail(e.getMsg());
     }
 }

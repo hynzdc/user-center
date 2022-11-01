@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
  * @description 统一异常类
  * @date 2022/10/29
  */
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class BusinessException extends RuntimeException{
     private String msg;
     private Integer code;
@@ -21,4 +21,5 @@ public class BusinessException extends RuntimeException{
         this.code = userCenterServiceEnum.getCode();
         this.msg = userCenterServiceEnum.getMsg();
     }
+    public BusinessException(String msg){}
 }

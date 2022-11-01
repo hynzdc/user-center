@@ -5,7 +5,12 @@ package com.hyn.service.impl;
 
 import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hyn.dto.req.UserQueryReqDto;
+import com.hyn.dto.resp.UserRespDto;
 import com.hyn.entity.User;
 import com.hyn.enums.UserCenterServiceEnum;
 import com.hyn.exception.BusinessException;
@@ -107,6 +112,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         request.getSession().setAttribute(USER_LOGIN_STATE, safetyUser);
         //返回这个用户
         return safetyUser;
+    }
+
+    @Override
+    public IPage<UserRespDto> searchUsers(UserQueryReqDto reqDto) {
+        Page<User> page = new Page<>(reqDto.getPageNo(), reqDto.getIsPage() == 1 ? reqDto.getPageSize() : reqDto.getIsPage());
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper
+                .like(StringUtils.isNotEmpty(reqDto.getUsername()),"username",reqDto.getUsername())
+                .eq(StringUtils.isNotEmpty(reqDto.getPhone()), "phone", reqDto.getPhone());
+        return this.baseMapper.searchUsers(page,userQueryWrapper);
     }
 
     /**

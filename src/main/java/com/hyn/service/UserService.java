@@ -3,7 +3,10 @@
  */
 package com.hyn.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hyn.dto.req.UserQueryReqDto;
+import com.hyn.dto.resp.UserRespDto;
 import com.hyn.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,4 +23,6 @@ public interface UserService extends IService<User> {
      */
     long userRegister(String userAccount, String userPassword, String checkPassword);
     User userLogin(String userAccount,String userPassword,HttpServletRequest request);
+
+    IPage<UserRespDto> searchUsers(UserQueryReqDto reqDto);
 }
