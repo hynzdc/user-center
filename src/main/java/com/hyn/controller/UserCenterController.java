@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  * @description 用户中心controller
  * @date 2022/10/30
  */
-@RestController
+@RestController("/user_center")
 @Api(tags = "用户中心")
 public class UserCenterController {
     @Autowired
