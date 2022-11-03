@@ -17,6 +17,8 @@ public enum UserCenterServiceEnum {
     USER_LOGIN_DETAIL_NO_BLANK(107,"用户登录信息不可以为空"),
     USER_NOT_FOUND(108,"帐户不存在"),
     USERNAME_OR_PASSWORD_ERROR(108,"用户名或者密码错误"),
+    USER_LOGIN_STATE(109,"userLoginState"),
+    PERMISSION_DENIED(110,"没有权限访问"),
     ;
 
     UserCenterServiceEnum(Integer code, String msg) {

@@ -29,13 +29,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private static final String SALT = "hynzdc";
 
-    /**
-     * @description 用户登录态键
-     * @author hyn
-     * @date 2022-10-30 20:50
-     */
-    private static final String USER_LOGIN_STATE = "userLoginState";
-
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
         //1.校验
@@ -109,7 +102,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //用户脱敏
         User safetyUser = getSafetyUser(loginUser);
         //记录用户的登录态
-        request.getSession().setAttribute(USER_LOGIN_STATE, safetyUser);
+        request.getSession().setAttribute(UserCenterServiceEnum.USER_LOGIN_STATE.getMsg(), safetyUser);
         //返回这个用户
         return safetyUser;
     }
