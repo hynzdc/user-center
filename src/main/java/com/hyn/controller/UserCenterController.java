@@ -13,6 +13,7 @@ import com.hyn.exception.BusinessException;
 import com.hyn.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,6 +54,9 @@ public class UserCenterController {
     public ConResult<IPage<UserRespDto>> searchUsers(@RequestBody UserQueryReqDto reqDto, HttpServletRequest request) {
         //仅管理员可查询
         User user = (User) request.getSession().getAttribute(UserCenterServiceEnum.USER_LOGIN_STATE.getMsg());
+        if (ObjectUtils.isEmpty(user)){
+            throw new BusinessException(UserCenterServiceEnum.PERMISSION_DENIED);
+        }
         if (!user.getUserRole().equals(UserRoleEnum.ADMIN_USER.getCode())){
             throw new BusinessException(UserCenterServiceEnum.PERMISSION_DENIED);
         }
