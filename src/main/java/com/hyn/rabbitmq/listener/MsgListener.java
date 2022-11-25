@@ -1,5 +1,6 @@
 package com.hyn.rabbitmq.listener;
 
+import com.hyn.rabbitmq.SysMessageQueueDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -24,5 +25,14 @@ public class MsgListener {
     public void systemMessageDirectListener(String msg){
         log.info("接受到的消息:"+msg);
         System.out.println("接受到的消息"+msg);
+    }
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue("hynzdc.message.system.queue"),
+            exchange = @Exchange("hynzdc.message.system"),
+            key = {"send-object-to-hyn"}
+    ))
+    public void systemMessageDirectListener(SysMessageQueueDto directListener){
+        log.info("hahahhahahahahh---------");
+        System.out.println("出发的事件为"+directListener.getEvent());
     }
 }

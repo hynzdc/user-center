@@ -2,6 +2,7 @@ package com.hyn.rabbitmq;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,7 +15,14 @@ import org.springframework.stereotype.Component;
 public class RabbitMqService {
     @Autowired
     RabbitTemplate rabbitTemplate;
+
+    @Async
     public void  sendMsgToUser(String msg){
         rabbitTemplate.convertAndSend("hynzdc.message.system","send-msg-to-hyn",msg);
+    }
+
+    @Async
+    public void  sendMsgToUser(SysMessageQueueDto msgToUser){
+        rabbitTemplate.convertAndSend("hynzdc.message.system","send-object-to-hyn",msgToUser);
     }
 }

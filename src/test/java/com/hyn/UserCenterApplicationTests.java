@@ -8,6 +8,7 @@ import cn.hutool.crypto.symmetric.AES;
 import com.hyn.common.cache.service.RedisService;
 import com.hyn.entity.User;
 import com.hyn.rabbitmq.RabbitMqService;
+import com.hyn.rabbitmq.SysMessageQueueDto;
 import com.hyn.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,6 +48,14 @@ class UserCenterApplicationTests {
 
     @Test
     void testRabbitMq(){
-        rabbitMqService.sendMsgToUser("郝亚宁真帅爷爷爷爷");
+        //rabbitMqService.sendMsgToUser("郝亚宁真帅爷爷爷爷");
+        long start = System.currentTimeMillis();
+        for (int i = 0; i <= 99;i++){
+            rabbitMqService.sendMsgToUser(SysMessageQueueDto.builder()
+                    .event("出发郝亚宁变帅事件")
+                    .build());
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("总共用时"+(end - start));
     }
 }
