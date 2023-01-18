@@ -22,8 +22,6 @@ public class CustomExceptionHandler {
     }
     @ExceptionHandler(BusinessException.class)
     public ConResult defaultExceptionHandler(BusinessException e){
-        System.out.println("dhawdawhoidhawoihdoiawhd");
-        System.out.println("和大海");
         return ConResult.fail(e.getMsg());
     }
 }

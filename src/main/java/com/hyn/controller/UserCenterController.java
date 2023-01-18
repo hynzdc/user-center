@@ -1,10 +1,12 @@
 package com.hyn.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.hyn.anotation.CurrentUser;
 import com.hyn.common.ConResult;
 import com.hyn.dto.req.UserLoginReqDto;
 import com.hyn.dto.req.UserQueryReqDto;
 import com.hyn.dto.req.UserRegisterReqDto;
+import com.hyn.dto.req.UserUpdateReqDto;
 import com.hyn.dto.resp.UserRespDto;
 import com.hyn.entity.User;
 import com.hyn.enums.UserCenterServiceEnum;
@@ -16,11 +18,11 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author hyn
@@ -28,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
  * @description 用户中心controller
  * @date 2022/10/30
  */
-@RestController("/user_center")
+@RestController
 @Api(tags = "用户中心")
 public class UserCenterController {
     @Autowired
@@ -43,6 +45,12 @@ public class UserCenterController {
     @ApiOperation("用户登录")
     public ConResult<User> userLogin(@RequestBody UserLoginReqDto reqDto, HttpServletRequest request){
         return ConResult.success(userService.userLogin(reqDto.getUserAccount(),reqDto.getUserPassword(),request));
+    }
+    @PostMapping("/logout")
+    @ApiOperation("用户登出")
+    public ConResult<Boolean> userLogout(HttpServletRequest request){
+        request.getSession().removeAttribute(UserCenterServiceEnum.USER_LOGIN_STATE.getMsg());
+        return ConResult.success(true);
     }
     /**
      * @description 分页获取用户列表
@@ -63,4 +71,19 @@ public class UserCenterController {
         return ConResult.success(userService.searchUsers(reqDto));
     }
 
+    @GetMapping("/searchUsersByTags")
+    @ApiOperation("根据标签去查询用户")
+    public ConResult<List<UserRespDto>> searchUsersByTags(@RequestParam(value = "tags",required = false) List<String> tagsList){
+        return ConResult.success(userService.searchUsersByTags(tagsList));
+    }
+    @GetMapping("/getCurrentUser")
+    @ApiOperation("获取当前用户的信息")
+    public ConResult<UserRespDto> getCurrentUser(HttpServletRequest request){
+        return ConResult.success(userService.getCurrentUser(request));
+    }
+    @PostMapping("/update")
+    @ApiOperation("修改用户的信息")
+    public ConResult<Boolean> updateUserDetail(@CurrentUser User user, @RequestBody UserUpdateReqDto reqDto){
+        return ConResult.success(userService.updateUserDetail(reqDto,user));
+    }
 }

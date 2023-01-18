@@ -29,12 +29,23 @@
     </sql>
     <sql id="Search_Users_List">
         id
-        , username, userAccount, avatarUrl, gender, phone, email, userStatus, userRole
+        , username, userAccount,planetCode, avatarUrl, gender, phone, tags, email, userStatus, userRole
     </sql>
     <select id="searchUsers" resultType="com.hyn.dto.resp.UserRespDto">
         select
         <include refid="Search_Users_List"/>
         from user
         ${ew.customSqlSegment}
+    </select>
+    <select id="searchUsersByTags" resultType="com.hyn.dto.resp.UserRespDto">
+        select
+        <include refid="Search_Users_List"/>
+        from user
+        ${ew.customSqlSegment}
+    </select>
+    <select id="getCurrentUser" resultType="com.hyn.dto.resp.UserRespDto">
+        select <include refid="Search_Users_List"/>
+        from user
+        where id = #{id}
     </select>
 </mapper>

@@ -3,6 +3,7 @@
  */
 package com.hyn.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -10,17 +11,23 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hyn.dto.req.UserQueryReqDto;
+import com.hyn.dto.req.UserUpdateReqDto;
 import com.hyn.dto.resp.UserRespDto;
 import com.hyn.entity.User;
 import com.hyn.enums.UserCenterServiceEnum;
+import com.hyn.enums.UserRoleEnum;
 import com.hyn.exception.BusinessException;
 import com.hyn.mapper.UserMapper;
 import com.hyn.service.UserService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -112,9 +119,74 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Page<User> page = new Page<>(reqDto.getPageNo(), reqDto.getIsPage() == 1 ? reqDto.getPageSize() : reqDto.getIsPage());
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper
-                .like(StringUtils.isNotEmpty(reqDto.getUsername()),"username",reqDto.getUsername())
+                .like(StringUtils.isNotEmpty(reqDto.getUsername()), "username", reqDto.getUsername())
                 .eq(StringUtils.isNotEmpty(reqDto.getPhone()), "phone", reqDto.getPhone());
-        return this.baseMapper.searchUsers(page,userQueryWrapper);
+        return this.baseMapper.searchUsers(page, userQueryWrapper);
+    }
+
+    @Override
+    public List<UserRespDto> searchUsersByTags(List<String> tagsList) {
+        if (CollectionUtil.isEmpty(tagsList)) {
+            throw new BusinessException(UserCenterServiceEnum.USER_TAGS_EMPTY);
+        }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        //拼接like查询
+        for (String tagName : tagsList) {
+            queryWrapper = queryWrapper.like("tags", tagName);
+        }
+//        List<User> listUser = this.list();
+//        List<User> safetyUserList = listUser.stream().map(e ->
+//                getSafetyUser(e)
+//        ).collect(Collectors.toList());
+//        List<User> resultUserList = new ArrayList<>();
+//        Gson gson = new Gson();
+//       safetyUserList.stream().filter(user->{
+//         List<String> tempTagNameList =  gson.fromJson(user.getTags(),new TypeToken<List<String>>(){}.getType());
+//           for (String tagName : tagsList) {
+//               if (!tempTagNameList.contains(tagName)){
+//                   return  false;
+//               }
+//           }
+//           return false;
+//       }).collect(Collectors.toList());
+        return this.baseMapper.searchUsersByTags(queryWrapper);
+    }
+
+    @Override
+    public UserRespDto getCurrentUser(HttpServletRequest request) {
+        User currentUser = (User) request.getSession().getAttribute(UserCenterServiceEnum.USER_LOGIN_STATE.getMsg());
+        if (Objects.isNull(currentUser)) {
+            throw new BusinessException(UserCenterServiceEnum.USER_NOT_LOGIN);
+        }
+        Long id = currentUser.getId();
+        return this.baseMapper.getCurrentUser(id);
+    }
+
+    @Override
+    public Boolean updateUserDetail(UserUpdateReqDto reqDto, User currentUser) {
+        if (ObjectUtils.isEmpty(reqDto)) {
+            throw new BusinessException(UserCenterServiceEnum.PARAMS_ERROR);
+        }
+        //如果是管理员允许更新任意用户
+        User user = new User();
+        BeanUtils.copyProperties(reqDto, user);
+        if (currentUser.getUserRole().equals(UserRoleEnum.ADMIN_USER.getCode())) {
+            //查询出olduser
+            User oldUser = this.getById(reqDto.getId());
+            if (ObjectUtils.isEmpty(oldUser)) {
+                throw new BusinessException(UserCenterServiceEnum.USER_NOT_FOUND);
+            }
+            return this.updateById(user);
+        }
+        //如果不是管理员没有权限
+        if (currentUser.getId() != reqDto.getId()) {
+            throw new BusinessException(UserCenterServiceEnum.PERMISSION_DENIED);
+        }
+        //如果是普通用户只能更新自己的信息
+        if (currentUser.getUserRole().equals(UserRoleEnum.NORMAL_USER.getCode()) && currentUser.getId().equals(reqDto.getId())) {
+            return this.updateById(user);
+        }
+        return false;
     }
 
     /**

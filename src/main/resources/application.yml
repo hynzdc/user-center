@@ -1,6 +1,12 @@
 server:
   port: 8080
+  servlet:
+    session:
+      cookie:
+        domain:
 spring:
+  profiles:
+    active: dev
   application:
     name: user-center
   redis:
@@ -13,6 +19,7 @@ spring:
         max-idle: 8 #连接池最小空闲连接数
         min-idle: 0 #连接超时时间
     timeout: 10000
+    database: 3
   datasource:
     username: root
     password: 12160203
@@ -27,6 +34,7 @@ spring:
     virtual-host: /
   session:
     timeout: 86400
+    store-type: redis
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:
@@ -38,7 +46,13 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
-
+# 拦截器路径拦截或者不拦截配置
+interceptorconfig:
+  path:
+    #该路径下任何类型请求均拦截
+    include:
+      - /update
+      - /searchUsersByTags
 xss:
   enabled: true
   excludes:

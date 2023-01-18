@@ -6,10 +6,12 @@ package com.hyn.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hyn.dto.req.UserQueryReqDto;
+import com.hyn.dto.req.UserUpdateReqDto;
 import com.hyn.dto.resp.UserRespDto;
 import com.hyn.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface UserService extends IService<User> {
     /**
@@ -25,4 +27,10 @@ public interface UserService extends IService<User> {
     User userLogin(String userAccount,String userPassword,HttpServletRequest request);
 
     IPage<UserRespDto> searchUsers(UserQueryReqDto reqDto);
+
+    List<UserRespDto> searchUsersByTags(List<String> tagsList);
+
+    UserRespDto getCurrentUser(HttpServletRequest request);
+
+    Boolean updateUserDetail(UserUpdateReqDto reqDto,User user);
 }

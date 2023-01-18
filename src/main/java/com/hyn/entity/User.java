@@ -2,6 +2,7 @@ package com.hyn.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "`user`")
-public class User {
+public class User implements Serializable {
     /**
      * id
      */
@@ -61,6 +62,12 @@ public class User {
      */
     @TableField(value = "phone")
     private String phone;
+
+    /**
+     * 标签
+     */
+    @TableField(value = "tags")
+    private String tags;
 
     /**
      * 邮箱
