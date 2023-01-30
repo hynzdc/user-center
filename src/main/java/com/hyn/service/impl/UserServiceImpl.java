@@ -162,6 +162,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return this.baseMapper.getCurrentUser(id);
     }
 
+    /**
+     * @description 更新用户信息
+     * @author hyn
+     * @param reqDto
+     * @param currentUser
+     * @date 2023-01-18 15:48
+     * @return java.lang.Boolean
+     */
     @Override
     public Boolean updateUserDetail(UserUpdateReqDto reqDto, User currentUser) {
         if (ObjectUtils.isEmpty(reqDto)) {
@@ -169,24 +177,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         //如果是管理员允许更新任意用户
         User user = new User();
-        BeanUtils.copyProperties(reqDto, user);
-        if (currentUser.getUserRole().equals(UserRoleEnum.ADMIN_USER.getCode())) {
-            //查询出olduser
+        if (currentUser.getUserRole().equals(UserRoleEnum.ADMIN_USER.getCode()) || currentUser.getId() == reqDto.getId()){
             User oldUser = this.getById(reqDto.getId());
-            if (ObjectUtils.isEmpty(oldUser)) {
+            if (oldUser == null){
                 throw new BusinessException(UserCenterServiceEnum.USER_NOT_FOUND);
             }
-            return this.updateById(user);
+            BeanUtils.copyProperties(reqDto, user);
         }
-        //如果不是管理员没有权限
-        if (currentUser.getId() != reqDto.getId()) {
-            throw new BusinessException(UserCenterServiceEnum.PERMISSION_DENIED);
-        }
-        //如果是普通用户只能更新自己的信息
-        if (currentUser.getUserRole().equals(UserRoleEnum.NORMAL_USER.getCode()) && currentUser.getId().equals(reqDto.getId())) {
-            return this.updateById(user);
-        }
-        return false;
+        return this.baseMapper.updateDetailsById(reqDto);
     }
 
     /**

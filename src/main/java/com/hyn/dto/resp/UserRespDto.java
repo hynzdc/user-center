@@ -36,4 +36,6 @@ public class UserRespDto {
     private Integer userStatus;
     @ApiModelProperty("用户角色")
     private Integer userRole;
+    @ApiModelProperty("用户创建时间")
+    private String createTime;
 }

@@ -17,8 +17,8 @@ import java.io.Serializable;
 public class UserUpdateReqDto implements Serializable {
     @ApiModelProperty("用户id")
     private Long id;
-    @ApiModelProperty("用户姓名")
-    private String userAccount;
+    @ApiModelProperty("用户昵称")
+    private String username;
     @ApiModelProperty("头像")
     private String avatarUrl;
     @ApiModelProperty("性别")
