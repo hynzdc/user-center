@@ -21,4 +21,6 @@ public interface UserMapper extends BaseMapper<User> {
     UserRespDto getCurrentUser(@Param("id") Long id);
 
     Boolean updateDetailsById(@Param("user") UserUpdateReqDto user);
+
+    IPage<UserRespDto> recommendUsers(Page<User> page);
 }

@@ -5,6 +5,7 @@ package com.hyn.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hyn.common.dto.req.BaseReqDto;
 import com.hyn.dto.req.UserQueryReqDto;
 import com.hyn.dto.req.UserUpdateReqDto;
 import com.hyn.dto.resp.UserRespDto;
@@ -33,4 +34,6 @@ public interface UserService extends IService<User> {
     UserRespDto getCurrentUser(HttpServletRequest request);
 
     Boolean updateUserDetail(UserUpdateReqDto reqDto,User user);
+
+    IPage<UserRespDto> recommendUsers(BaseReqDto reqDto);
 }

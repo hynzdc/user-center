@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hyn.common.dto.req.BaseReqDto;
 import com.hyn.dto.req.UserQueryReqDto;
 import com.hyn.dto.req.UserUpdateReqDto;
 import com.hyn.dto.resp.UserRespDto;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -185,6 +187,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             BeanUtils.copyProperties(reqDto, user);
         }
         return this.baseMapper.updateDetailsById(reqDto);
+    }
+
+    @Override
+    public IPage<UserRespDto> recommendUsers(BaseReqDto reqDto) {
+        Page<User> page = new Page<>(reqDto.getPageNo(), reqDto.getIsPage() == 1 ? reqDto.getPageSize() : reqDto.getIsPage());
+
+        return this.baseMapper.recommendUsers(page);
     }
 
     /**

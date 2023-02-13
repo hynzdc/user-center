@@ -1,8 +1,10 @@
 package com.hyn.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyn.anotation.CurrentUser;
 import com.hyn.common.ConResult;
+import com.hyn.common.dto.req.BaseReqDto;
 import com.hyn.dto.req.UserLoginReqDto;
 import com.hyn.dto.req.UserQueryReqDto;
 import com.hyn.dto.req.UserRegisterReqDto;
@@ -85,5 +87,11 @@ public class UserCenterController {
     @ApiOperation("修改用户的信息")
     public ConResult<Boolean> updateUserDetail(@CurrentUser User user, @RequestBody UserUpdateReqDto reqDto){
         return ConResult.success(userService.updateUserDetail(reqDto,user));
+    }
+
+    @PostMapping("/recommend")
+    @ApiOperation("获取推荐用户")
+    public ConResult<IPage<UserRespDto>> recommendUsers(BaseReqDto reqDto){
+        return ConResult.success(userService.recommendUsers(reqDto));
     }
 }

@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel("用户出参对象")
-public class UserRespDto {
+public class UserRespDto{
     @ApiModelProperty("用户id")
     private Long id;
     @ApiModelProperty("用户姓名")

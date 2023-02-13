@@ -1,5 +1,6 @@
 package com.hyn.once;
 
+import cn.hutool.core.date.StopWatch;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.read.listener.PageReadListener;
@@ -31,6 +32,8 @@ public class ImportExcel {
      * 3. 直接读即可
      */
     public static void main(String[] args) {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         String fileName = "/Users/austin/Documents/星球项目/用户中心/user-center-after/user-center/src/main/resources/static/test.xlsx";
         // 这里 需要指定读用哪个class去读，然后读取第一个sheet 同步读取会自动finish
         List<XingQiuUserInfo> list = EasyExcel.read(fileName).head(XingQiuUserInfo.class).sheet().doReadSync();
@@ -43,7 +46,8 @@ public class ImportExcel {
             // 返回每条数据的键值对 表示所在的列 和所在列的值
             System.out.println(data);
         }
-
+        stopWatch.stop();
+        System.out.println(stopWatch.getTotalTimeSeconds());
     }
     public void synchronousRead() {
 
